@@ -2,17 +2,37 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to Firebase Hosting on merge
+
 on:
   push:
     branches:
-      - main
+      - main  # mainブランチにpushされたら実行
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - run: yarn install --immutable --immutable-cache --check-cache && yarn build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      # ① コードの取得
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ② Node.jsのセットアップ（バージョンは必要に応じて変更）
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ③ Yarnの依存関係をインストールしてビルド
+      - name: Install dependencies and build
+        run: |
+          corepack enable
+          yarn install --immutable --immutable-cache --check-cache
+          yarn build
+
+      # ④ Firebase Hostingにデプロイ
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BLOG_1F782 }}
