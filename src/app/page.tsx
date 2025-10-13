@@ -10,7 +10,7 @@ export default function Index() {
       <Container>
         <section className="max-w-3xl mx-auto">
           <h1 className="text-4xl font-bold mb-10 text-center tracking-tight text-gray-900 dark:text-gray-100">
-            Toruche Blog
+            Blog
           </h1>
 
           <div className="space-y-6">

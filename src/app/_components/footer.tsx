@@ -31,7 +31,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 text-sm text-gray-500 dark:text-gray-400 text-center">
-          © {new Date().getFullYear()} Toruche Blog. All rights reserved.
+          © {new Date().getFullYear()} Blog. All rights reserved.
         </div>
       </Container>
     </footer>

@@ -7,8 +7,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Toruche Blog",
+  title: "Blog",
   description: "A statically generated blog built with Next.js and Tailwind CSS",
+  metadataBase: new URL("http://localhost:3000"), 
 };
 
 const themeScript = `
