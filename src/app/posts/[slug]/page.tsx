@@ -7,13 +7,13 @@ import Header from "@/app/_components/header";
 import { PostBody } from "@/app/_components/post-body";
 import { PostHeader } from "@/app/_components/post-header";
 
-interface PageProps {
+interface PostPageProps {
   params: {
     slug: string;
   };
 }
 
-export default async function Post({ params }: PageProps) {
+export default async function Post({ params }: PostPageProps) {
   const post = getPostBySlug(params.slug);
   if (!post) return notFound();
 
@@ -37,7 +37,7 @@ export default async function Post({ params }: PageProps) {
   );
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const post = getPostBySlug(params.slug);
   if (!post) return notFound();
 
