@@ -1,28 +1,37 @@
 import Container from "@/app/_components/container";
-import { EXAMPLE_PATH } from "@/lib/constants";
 
 export function Footer() {
   return (
     <footer className="bg-neutral-50 border-t border-neutral-200 dark:bg-slate-800">
       <Container>
-        <div className="py-28 flex flex-col lg:flex-row items-center">
-          <h3 className="text-4xl lg:text-[2.5rem] font-bold tracking-tighter leading-tight text-center lg:text-left mb-10 lg:mb-0 lg:pr-4 lg:w-1/2">
-            Statically Generated with Next.js.
+        <div className="py-16 flex flex-col lg:flex-row items-center justify-between text-center lg:text-left">
+          <h3 className="text-2xl lg:text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-200">
+            Built with Next.js × Tailwind CSS
           </h3>
-          <div className="flex flex-col lg:flex-row justify-center items-center lg:pl-4 lg:w-1/2">
+
+          <div className="mt-6 lg:mt-0 flex flex-col lg:flex-row items-center gap-4">
             <a
-              href="https://nextjs.org/docs/app/building-your-application/routing/layouts-and-templates"
-              className="mx-3 bg-black hover:bg-white hover:text-black border border-black text-white font-bold py-3 px-12 lg:px-8 duration-200 transition-colors mb-6 lg:mb-0"
+              href="https://nextjs.org/docs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mx-2 bg-black hover:bg-white hover:text-black border border-black text-white font-semibold py-2 px-6 rounded duration-200 transition-colors"
             >
-              Read Documentation
+              Next.js Docs
             </a>
+
             <a
-              href={`https://github.com/vercel/next.js/tree/canary/examples/${EXAMPLE_PATH}`}
-              className="mx-3 font-bold hover:underline"
+              href="https://github.com/Nyxode/Blog"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mx-2 text-blue-600 dark:text-blue-400 hover:underline font-semibold"
             >
               View on GitHub
             </a>
           </div>
+        </div>
+
+        <div className="mt-8 text-sm text-gray-500 dark:text-gray-400 text-center">
+          © {new Date().getFullYear()} Toruche Blog. All rights reserved.
         </div>
       </Container>
     </footer>
