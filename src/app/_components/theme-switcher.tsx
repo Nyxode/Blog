@@ -2,8 +2,8 @@
 
 import styles from './switch.module.css'
 import { memo, useEffect, useState } from 'react'
+import Script from 'next/script' // ✅ 追加
 
-// ===== TypeScript用のグローバル宣言 =====
 declare global {
   interface Window {
     updateDOM: () => void
@@ -18,7 +18,6 @@ const modes: ColorSchemePreference[] = ['system', 'dark', 'light']
 export const NoFOUCScript = (storageKey: string) => {
   const [SYSTEM, DARK, LIGHT] = ['system', 'dark', 'light']
 
-  /** 一時的にトランジションを無効化する関数 */
   const modifyTransition = () => {
     const css = document.createElement('style')
     css.textContent = '*,*:after,*:before{transition:none !important;}'
@@ -31,7 +30,6 @@ export const NoFOUCScript = (storageKey: string) => {
 
   const media = matchMedia(`(prefers-color-scheme: ${DARK})`)
 
-  /** updateDOM関数を定義 */
   window.updateDOM = () => {
     const restoreTransitions = modifyTransition()
     const mode = localStorage.getItem(storageKey) ?? SYSTEM
@@ -46,15 +44,12 @@ export const NoFOUCScript = (storageKey: string) => {
     restoreTransitions()
   }
 
-  // 初回呼び出し
   window.updateDOM()
-  // システムテーマの変化にも対応
   media.addEventListener('change', window.updateDOM)
 }
 
 let updateDOM: () => void = () => {}
 
-/** Toggle button component */
 const Switch = () => {
   const [mode, setMode] = useState<ColorSchemePreference>(() => {
     if (typeof localStorage === 'undefined') return 'system'
@@ -64,11 +59,9 @@ const Switch = () => {
   })
 
   useEffect(() => {
-    // window.updateDOM が定義されていれば代入
     if (typeof window !== 'undefined' && typeof window.updateDOM === 'function') {
       updateDOM = window.updateDOM
     } else {
-      // fallback（安全策）
       updateDOM = () => {
         const root = document.documentElement
         if (mode === 'dark') root.classList.add('dark')
@@ -76,7 +69,6 @@ const Switch = () => {
       }
     }
 
-    // 他タブと同期
     const syncTabs = (e: StorageEvent) => {
       if (e.key === STORAGE_KEY && e.newValue)
         setMode(e.newValue as ColorSchemePreference)
@@ -105,19 +97,17 @@ const Switch = () => {
 }
 
 /** Injected script to avoid FOUC */
-const Script = memo(() => (
-  <script
-    dangerouslySetInnerHTML={{
-      __html: `(${NoFOUCScript.toString()})('${STORAGE_KEY}')`,
-    }}
-  />
+const ScriptInit = memo(() => (
+  <Script id="theme-init" strategy="beforeInteractive">
+    {`(${NoFOUCScript.toString()})('${STORAGE_KEY}')`}
+  </Script>
 ))
 
 /** ThemeSwitcher component */
 export const ThemeSwitcher = () => {
   return (
     <>
-      <Script />
+      <ScriptInit />
       <Switch />
     </>
   )

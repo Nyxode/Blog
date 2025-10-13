@@ -1,8 +1,7 @@
-import Footer from "@/app/_components/footer";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import cn from "classnames";
-import { ThemeSwitcher } from "./_components/theme-switcher";
+import Footer from "@/app/_components/footer";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -12,6 +11,25 @@ export const metadata: Metadata = {
   description: "A statically generated blog built with Next.js and Tailwind CSS",
 };
 
+const themeScript = `
+  (function() {
+    try {
+      const STORAGE_KEY = 'nextjs-blog-starter-theme';
+      const DARK = 'dark';
+      const LIGHT = 'light';
+      const SYSTEM = 'system';
+      const media = matchMedia('(prefers-color-scheme: dark)');
+      const mode = localStorage.getItem(STORAGE_KEY) ?? SYSTEM;
+      const systemMode = media.matches ? DARK : LIGHT;
+      const resolved = mode === SYSTEM ? systemMode : mode;
+      const classList = document.documentElement.classList;
+      if (resolved === DARK) classList.add(DARK);
+      else classList.remove(DARK);
+      document.documentElement.setAttribute('data-mode', mode);
+    } catch (e) {}
+  })();
+`;
+
 export default function RootLayout({
   children,
 }: {
@@ -19,8 +37,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className={cn(inter.className, "dark:bg-slate-900 dark:text-slate-400")}>
-        <ThemeSwitcher />
         <div className="min-h-screen">{children}</div>
         <Footer />
       </body>
