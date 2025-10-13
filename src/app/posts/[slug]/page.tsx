@@ -13,6 +13,7 @@ type Params = {
   };
 };
 
+// ===== 記事ページ本体 =====
 export default async function Post({ params }: Params) {
   const post = getPostBySlug(params.slug);
 
@@ -40,6 +41,7 @@ export default async function Post({ params }: Params) {
   );
 }
 
+// ===== メタデータ生成（SEO・OGP対応） =====
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const post = getPostBySlug(params.slug);
 
@@ -54,12 +56,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     openGraph: {
       title,
       images: [
-        post.ogImage?.url || "/assets/blog/default-og.png",
+        post.ogImage?.url ?? "/assets/blog/default-og.png",
       ],
     },
   };
 }
 
+// ===== 静的パス生成（SSG対応） =====
 export async function generateStaticParams() {
   const posts = getAllPosts();
 
