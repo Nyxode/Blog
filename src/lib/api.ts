@@ -2,6 +2,8 @@ import { Post } from "@/interfaces/post";
 import fs from "fs";
 import matter from "gray-matter";
 import { join } from "path";
+import markdownToHtml from "./markdownToHtml";
+
 
 const postsDirectory = join(process.cwd(), "_posts");
 
@@ -18,11 +20,16 @@ export function getPostBySlug(slug: string) {
   return { ...data, slug: realSlug, content } as Post;
 }
 
+export async function getPostContent(slug: string) {
+  const post = getPostBySlug(slug);
+  const htmlContent = await markdownToHtml(post.content);
+  return { ...post, content: htmlContent };
+}
+
 export function getAllPosts(): Post[] {
   const slugs = getPostSlugs();
   const posts = slugs
     .map((slug) => getPostBySlug(slug))
-    // sort posts by date in descending order
     .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
   return posts;
 }
