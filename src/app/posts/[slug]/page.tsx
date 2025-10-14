@@ -5,16 +5,14 @@ import markdownToHtml from "@/lib/markdownToHtml";
 import Container from "@/app/_components/container";
 import Header from "@/app/_components/header";
 import { PostBody } from "@/app/_components/post-body";
-import { PostHeader } from "@/app/_components/post-header";
 
 type Params = {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>; 
 };
 
-export default async function Post({ params }: Params) {
-  const post = getPostBySlug(params.slug);
+export default async function Post(props: Params) {
+  const { slug } = await props.params; 
+  const post = getPostBySlug(slug);
 
   if (!post) return notFound();
 
@@ -25,7 +23,7 @@ export default async function Post({ params }: Params) {
       <Container>
         <Header />
 
-        {/* タイトルと日付（独立領域） */}
+        {/* タイトル・日付を独立表示 */}
         <section className="max-w-3xl mx-auto text-center mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3">
             {post.title}
@@ -39,7 +37,7 @@ export default async function Post({ params }: Params) {
           </p>
         </section>
 
-        {/* 記事本文（白背景） */}
+        {/* 記事本文 */}
         <article className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-8 max-w-3xl mx-auto">
           <PostBody content={content} />
         </article>
@@ -48,8 +46,9 @@ export default async function Post({ params }: Params) {
   );
 }
 
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const post = getPostBySlug(params.slug);
+export async function generateMetadata(props: Params): Promise<Metadata> {
+  const { slug } = await props.params; 
+  const post = getPostBySlug(slug);
   if (!post) return notFound();
 
   const title = `${post.title} | Blog`;
