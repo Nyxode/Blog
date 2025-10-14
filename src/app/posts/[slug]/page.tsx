@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPostBySlug } from "@/lib/api";
@@ -8,23 +7,40 @@ import Header from "@/app/_components/header";
 import { PostBody } from "@/app/_components/post-body";
 import { PostHeader } from "@/app/_components/post-header";
 
-export default async function Post({ params }: { params: { slug: string } }) {
+type Params = {
+  params: {
+    slug: string;
+  };
+};
+
+export default async function Post({ params }: Params) {
   const post = getPostBySlug(params.slug);
+
   if (!post) return notFound();
 
   const content = await markdownToHtml(post.content || "");
 
   return (
-    <main>
+    <main className="bg-gray-50 dark:bg-slate-900 min-h-screen py-12">
       <Container>
         <Header />
-        <article className="mb-32">
-          <PostHeader
-            title={post.title}
-            coverImage={post.coverImage}
-            date={post.date}
-            author={post.author}
-          />
+
+        {/* タイトルと日付（独立領域） */}
+        <section className="max-w-3xl mx-auto text-center mb-10">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+            {post.title}
+          </h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {new Date(post.date).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
+        </section>
+
+        {/* 記事本文（白背景） */}
+        <article className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-8 max-w-3xl mx-auto">
           <PostBody content={content} />
         </article>
       </Container>
@@ -32,11 +48,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const post = getPostBySlug(params.slug);
   if (!post) return notFound();
 
@@ -46,12 +58,14 @@ export async function generateMetadata({
     title,
     openGraph: {
       title,
-      images: [post.ogImage?.url ?? "/assets/blog/default-og.png"],
+      images: [post.ogImage?.url || "/assets/blog/default-og.png"],
     },
   };
 }
 
 export async function generateStaticParams() {
   const posts = getAllPosts();
-  return posts.map((post) => ({ slug: post.slug }));
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
 }
