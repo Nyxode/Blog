@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import cn from "classnames";
 import Footer from "@/app/_components/footer";
 import "./globals.css";
+import "./zenn-content.css"; // ← ✨これを追加！
 
 const inter = Inter({ subsets: ["latin"] });
 

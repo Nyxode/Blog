@@ -20,3 +20,5 @@ excerpt: "マークダウン記述確認"
 - **Next.js 15**（つまり **App Router構成**、`src/app/` 配下でページ管理）
 - エディタは**zenn-editor**を使用する。
 - 記事は `/src/_posts` に置いてる
+
+![Zenn Logo](/assets/blog/a2fc0d9f8a.jpeg)
