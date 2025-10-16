@@ -18,7 +18,7 @@ export default async function Post({ params }: Params) {
   const content = await markdownToHtml(post.content || "");
 
   return (
-    <main className="bg-gray-50 dark:bg-slate-900 min-h-screen py-12">
+    <main className="min-h-screen py-12">
       <Container>
         <Header />
 
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const post = getPostBySlug(params.slug);
   if (!post) return notFound();
 
-  const title = `${post.title} | Blog`;
+  const title = `${post.title} | FUKAGAWA.dev`;
 
   return {
     title,

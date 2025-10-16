@@ -9,11 +9,11 @@ export default function Index() {
   const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
 
   return (
-    <main className="bg-gray-50 dark:bg-slate-900 min-h-screen py-12">
+    <main className="min-h-screen py-12">
       <Container>
         <section className="max-w-3xl mx-auto">
           <h1 className="text-4xl font-bold mb-10 text-center tracking-tight text-gray-900 dark:text-gray-100">
-            Blog
+            FUKAGAWA.dev
           </h1>
 
           <div className="space-y-6">
